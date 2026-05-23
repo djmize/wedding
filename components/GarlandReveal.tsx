@@ -2,14 +2,23 @@
 
 import { useEffect, useRef } from "react";
 
+const DEBUG = true;
+
 export default function GarlandReveal({ src, className = "" }: { src: string; className?: string }) {
   const ref = useRef<HTMLImageElement>(null);
+  const debugRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    const dbg = () => document.getElementById("gr-debug");
+    const log = (msg: string) => { const d = dbg(); if (d) d.textContent = msg; document.title = msg; };
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    log("GR:1-started");
+    const el = ref.current;
+    if (!el) { log("GR:2-el-null"); return; }
+    log("GR:3-el-ok");
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { log("GR:4-reduced-motion"); return; }
+    log("GR:5-setup");
 
     const isMobile = window.innerWidth < 768;
     const minScale = isMobile ? 0.80 : 0.40;
@@ -32,6 +41,8 @@ export default function GarlandReveal({ src, className = "" }: { src: string; cl
       const scale = minScale + normalizedSigmoid(t) * (maxScale - minScale);
       el.style.marginTop = `-${el.offsetHeight * (1 - scale)}px`;
       el.style.transform = `scale(${scale})`;
+      const dbg = document.getElementById("gr-debug");
+      if (dbg) dbg.textContent = `scale:${scale.toFixed(2)} t:${t.toFixed(2)} mob:${isMobile} h:${el.offsetHeight}`;
     };
 
     const onScroll = () => {
@@ -42,7 +53,9 @@ export default function GarlandReveal({ src, className = "" }: { src: string; cl
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("touchmove", onScroll, { passive: true });
     el.addEventListener("load", update);
+    log("GR:6-calling-update");
     update();
+    log("GR:7-done");
 
     return () => {
       window.removeEventListener("scroll", onScroll);
@@ -53,14 +66,28 @@ export default function GarlandReveal({ src, className = "" }: { src: string; cl
   }, []);
 
   return (
-    <img
-      ref={ref}
-      src={src}
-      className={className}
-      style={{ transformOrigin: "bottom center", willChange: "transform" }}
-      alt=""
-      aria-hidden="true"
-      loading="lazy"
-    />
+    <>
+      <img
+        ref={ref}
+        src={src}
+        className={className}
+        style={{ transformOrigin: "bottom center", willChange: "transform" }}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+      />
+      {DEBUG && (
+        <div
+          id="gr-debug"
+          style={{
+            position: "fixed", top: 0, left: 0, zIndex: 9999,
+            background: "red", color: "white", padding: "6px 10px",
+            fontSize: "14px", fontFamily: "monospace",
+          }}
+        >
+          no update yet
+        </div>
+      )}
+    </>
   );
 }

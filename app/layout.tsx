@@ -23,6 +23,7 @@ export const metadata: Metadata = {
   description: `The wedding of ${config.partner1} and ${config.partner2}`,
 };
 
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
