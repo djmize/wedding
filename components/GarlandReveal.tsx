@@ -11,20 +11,25 @@ export default function GarlandReveal({ src, className = "" }: { src: string; cl
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    const isMobile = window.innerWidth < 768;
+    const minScale = isMobile ? 0.80 : 0.40;
+    const maxScale = isMobile ? 1.20 : 1.25;
+
+    const K = 3;
+    const T_MAX = 1.5;
+    const sigmoid = (x: number) => 1 / (1 + Math.exp(x));
+    const lo = sigmoid(K * T_MAX);
+    const hi = sigmoid(-K * T_MAX);
+    const normalizedSigmoid = (t: number) => (sigmoid(K * t) - lo) / (hi - lo);
+
     let rafId: number;
 
     const update = () => {
       const rect = el.getBoundingClientRect();
       const elementCenter = rect.top + rect.height / 2;
       const viewportMid = window.innerHeight / 2;
-      // t = 1 when entering from bottom, 0 when centered, -1 when exiting top
-      const t = Math.max(-1.5, Math.min(1.5, (elementCenter - viewportMid) / viewportMid));
-      const k = 3;
-      const raw = 1 / (1 + Math.exp(k * t));
-      const lo = 1 / (1 + Math.exp(k * 1.5));
-      const hi = 1 / (1 + Math.exp(-k * 1.5));
-      const n = (raw - lo) / (hi - lo);
-      const scale = 0.40 + n * 0.85;
+      const t = Math.max(-T_MAX, Math.min(T_MAX, (elementCenter - viewportMid) / viewportMid));
+      const scale = minScale + normalizedSigmoid(t) * (maxScale - minScale);
       el.style.marginTop = `-${el.offsetHeight * (1 - scale)}px`;
       el.style.transform = `scale(${scale})`;
     };
@@ -35,10 +40,14 @@ export default function GarlandReveal({ src, className = "" }: { src: string; cl
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("touchmove", onScroll, { passive: true });
+    el.addEventListener("load", update);
     update();
 
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("touchmove", onScroll);
+      el.removeEventListener("load", update);
       cancelAnimationFrame(rafId);
     };
   }, []);
