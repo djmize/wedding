@@ -22,6 +22,32 @@ html {
   animation: fadeUp 1.4s ease-out 0.3s both;
 }
 
+/* Scroll reveal */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.85s ease-out, transform 0.85s ease-out;
+}
+
+.reveal-item.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-up-delay {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-item {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 @theme {
   --color-cream: #FFFDF8;
   --color-ivory: #F9F5EE;
