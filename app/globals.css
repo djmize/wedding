@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #FAF6EE;
+  --color-sand: #EDE4D3;
+  --color-rattan: #C4A882;
+  --color-bark: #2C1A0E;
+  --color-driftwood: #7A5C4A;
+  --color-mist: #B09880;
+  --color-palm: #2D5A3D;
+  --color-paradise: #E07830;
+  --color-hibiscus: #C4337A;
+  --color-lagoon: #4AABBC;
+
+  --font-display: var(--font-cormorant), serif;
+}
