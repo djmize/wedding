@@ -19,9 +19,14 @@ export default function GarlandReveal({ src, className = "" }: { src: string; cl
       const viewportMid = window.innerHeight / 2;
       // t = 1 when entering from bottom, 0 when centered, -1 when exiting top
       const t = Math.max(-1.5, Math.min(1.5, (elementCenter - viewportMid) / viewportMid));
-      const n = (1.5 - t) / 3; // normalize t to 0→1
-      const eased = n * n * (3 - 2 * n); // smoothstep: slow-fast-slow
-      el.style.transform = `scale(${0.25 + eased * 1.5})`;
+      const k = 3;
+      const raw = 1 / (1 + Math.exp(k * t));
+      const lo = 1 / (1 + Math.exp(k * 1.5));
+      const hi = 1 / (1 + Math.exp(-k * 1.5));
+      const n = (raw - lo) / (hi - lo);
+      const scale = 0.40 + n * 0.85;
+      el.style.marginTop = `-${el.offsetHeight * (1 - scale)}px`;
+      el.style.transform = `scale(${scale})`;
     };
 
     const onScroll = () => {
