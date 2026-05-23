@@ -116,7 +116,7 @@ export default function Home() {
           {/* Invitation frame card — larger, with shadow */}
           <div
             className="relative w-full max-w-[340px] md:max-w-[410px] mx-auto drop-shadow-[0_6px_28px_rgba(44,26,14,0.09)]"
-            style={{ paddingBottom: "125%" }}
+            style={{ aspectRatio: "1122 / 1402" }}
           >
             <img
               src={`${BASE}/tropical-frame-rectangular-01.png`}

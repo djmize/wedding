@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Lato } from "next/font/google";
+import { Cormorant_Garamond, Libre_Baskerville } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import config from "@/lib/config";
@@ -11,10 +11,11 @@ const cormorant = Cormorant_Garamond({
   style: ["normal", "italic"],
 });
 
-const lato = Lato({
-  variable: "--font-lato",
+const libreBaskerville = Libre_Baskerville({
+  variable: "--font-libre-baskerville",
   subsets: ["latin"],
-  weight: ["300", "400", "700"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -25,8 +26,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${cormorant.variable} ${lato.variable} bg-cream text-bark antialiased`}
-            style={{ fontFamily: "var(--font-lato), sans-serif" }}>
+      <body className={`${cormorant.variable} ${libreBaskerville.variable} bg-cream text-bark antialiased`}
+            style={{ fontFamily: "var(--font-libre-baskerville), serif" }}>
         <Nav />
         <main>{children}</main>
       </body>
