@@ -1,5 +1,6 @@
 import RevealSection from "@/components/RevealSection";
 import ParallaxBotanical from "@/components/ParallaxBotanical";
+import GarlandReveal from "@/components/GarlandReveal";
 
 const BASE = "/assets/wedding-botanical";
 
@@ -31,14 +32,16 @@ export default function Home() {
         <ParallaxBotanical
           src={`${BASE}/tropical-corner-top-right-01.png`}
           className="absolute -top-12 -right-14 md:-right-24 w-[50vw] md:w-[37vw] max-w-xl pointer-events-none select-none"
-          speed={0.08}
+          speed={0.06}
+          scrollBased
           loading="eager"
         />
 
         <ParallaxBotanical
           src={`${BASE}/tropical-corner-bottom-left-01.png`}
           className="absolute -bottom-12 -left-10 w-44 md:w-64 pointer-events-none select-none hidden md:block opacity-75"
-          speed={0.05}
+          speed={0.04}
+          scrollBased
           loading="eager"
         />
 
@@ -74,11 +77,10 @@ export default function Home() {
       </section>
 
       {/* ── Garland ── */}
-      <div className="w-full overflow-hidden pointer-events-none select-none -mt-12 md:-mt-20 -mb-8 md:-mb-14">
-        <img
+      <div className="w-full pointer-events-none select-none -mt-12 md:-mt-20 -mb-8 md:-mb-14">
+        <GarlandReveal
           src={`${BASE}/tropical-garland-horizontal-01.png`}
           className="w-full"
-          alt="" aria-hidden="true" loading="lazy"
         />
       </div>
 
