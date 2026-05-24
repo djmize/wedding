@@ -44,29 +44,34 @@ export default function GarlandReveal({ src, className = "" }: { src: string; cl
     // scroll/touch events update targetScale only.
     // The rAF loop eases currentScale toward targetScale each frame.
     // No CSS transition — avoids the restart-chop on discrete mouse-wheel input.
-    const SMOOTHING = 0.1; // raise → snappier, lower → floatier
+    const SMOOTHING = 0.12; // raise → snappier, lower → floatier
     let targetScale = minScale;
     let currentScale = minScale;
     let rafId: number;
     let ticking = false;
 
-    const tick = () => {
+    const apply = () => {
       currentScale += (targetScale - currentScale) * SMOOTHING;
-      el.style.transform = `scale(${currentScale})`;
-      if (Math.abs(targetScale - currentScale) > 0.0005) {
-        rafId = requestAnimationFrame(tick);
+      el.style.transform = `translate3d(0,0,0) scale(${currentScale})`;
+      if (Math.abs(targetScale - currentScale) > 0.001) {
+        rafId = requestAnimationFrame(apply);
       } else {
-        el.style.transform = `scale(${targetScale})`;
+        currentScale = targetScale;
+        el.style.transform = `translate3d(0,0,0) scale(${currentScale})`;
         ticking = false;
+      }
+    };
+
+    const start = () => {
+      if (!ticking) {
+        ticking = true;
+        rafId = requestAnimationFrame(apply);
       }
     };
 
     const onScroll = () => {
       targetScale = computeTarget();
-      if (!ticking) {
-        ticking = true;
-        rafId = requestAnimationFrame(tick);
-      }
+      start();
     };
 
     // ─── Calibration triggers ───────────────────────────────────────────────
@@ -75,7 +80,8 @@ export default function GarlandReveal({ src, className = "" }: { src: string; cl
       calibrate();
       targetScale = computeTarget();
       currentScale = targetScale;
-      el.style.transform = `scale(${currentScale})`;
+      el.style.transition = "none";
+      el.style.transform = `translate3d(0,0,0) scale(${currentScale})`;
     };
 
     const onResize = () => snap();
