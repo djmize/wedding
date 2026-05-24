@@ -7,8 +7,13 @@ body {
   overflow-x: clip;
 }
 
-html {
-  scroll-behavior: smooth;
+/* Respect reduced-motion for anchor/hash navigation too.
+   Lenis handles desktop smooth-scroll; this CSS fallback only applies
+   on mobile (no Lenis) and only when the user hasn't opted out of motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @keyframes fadeUp {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Libre_Baskerville } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
+import SmoothScroll from "@/components/SmoothScroll";
 import config from "@/lib/config";
 
 const cormorant = Cormorant_Garamond({
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${cormorant.variable} ${libreBaskerville.variable} bg-cream text-bark antialiased`}
             style={{ fontFamily: "var(--font-libre-baskerville), serif" }}>
+        <SmoothScroll />
         <Nav />
         <main>{children}</main>
       </body>
