@@ -23,9 +23,8 @@ export default function ParallaxBotanical({
     const el = ref.current;
     if (!el) return;
 
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isMobile = window.innerWidth < 768;
-    if (prefersReduced || isMobile) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.innerWidth < 768) return;
 
     let rafId: number;
 
@@ -46,11 +45,32 @@ export default function ParallaxBotanical({
       rafId = requestAnimationFrame(update);
     };
 
+    // Re-run update on layout changes so the offset stays correct after
+    // resize, orientation flip, or virtual keyboard appearance.
+    const onResize = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(update);
+    };
+
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", onResize);
+      window.visualViewport.addEventListener("scroll", onScroll);
+    }
+
     update();
 
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", onResize);
+        window.visualViewport.removeEventListener("scroll", onScroll);
+      }
       cancelAnimationFrame(rafId);
     };
   }, [speed, scrollBased]);

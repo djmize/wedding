@@ -21,9 +21,17 @@ export default function GarlandReveal({ src, className = "" }: { src: string; cl
     const hi = sigmoid(-K * T_MAX);
     const normalizedSigmoid = (t: number) => (sigmoid(K * t) - lo) / (hi - lo);
 
-    // Cache stable layout values — bottom edge is invariant with transformOrigin:bottom center
-    let elBottomDoc = el.getBoundingClientRect().bottom + window.scrollY;
-    let elHeight = el.offsetHeight;
+    // ─── Stable layout cache ────────────────────────────────────────────────
+    // With transformOrigin:"bottom center", getBoundingClientRect().bottom is
+    // invariant to scale — it always equals the layout bottom. Caching it means
+    // computeTarget() is pure arithmetic with zero DOM reads per frame.
+    let elBottomDoc = 0;
+    let elHeight = 0;
+
+    const calibrate = () => {
+      elBottomDoc = el.getBoundingClientRect().bottom + window.scrollY;
+      elHeight = el.offsetHeight;
+    };
 
     const computeTarget = (): number => {
       const elCenter = elBottomDoc - window.scrollY - elHeight / 2;
@@ -32,43 +40,71 @@ export default function GarlandReveal({ src, className = "" }: { src: string; cl
       return minScale + normalizedSigmoid(t) * (maxScale - minScale);
     };
 
-    // Snap to initial scale with no transition, then enable CSS transition.
-    // CSS transitions run on the GPU compositor thread — smooth on all browsers.
-    el.style.transition = "none";
-    el.style.transform = `scale(${computeTarget()})`;
-    requestAnimationFrame(() => {
-      el.style.transition = "transform 0.3s ease-out";
-    });
-
+    // ─── rAF lerp ───────────────────────────────────────────────────────────
+    // scroll/touch events update targetScale only.
+    // The rAF loop eases currentScale toward targetScale each frame.
+    // No CSS transition — avoids the restart-chop on discrete mouse-wheel input.
+    const SMOOTHING = 0.1; // raise → snappier, lower → floatier
+    let targetScale = minScale;
+    let currentScale = minScale;
     let rafId: number;
+    let ticking = false;
 
-    const update = () => {
-      el.style.transform = `scale(${computeTarget()})`;
+    const tick = () => {
+      currentScale += (targetScale - currentScale) * SMOOTHING;
+      el.style.transform = `scale(${currentScale})`;
+      if (Math.abs(targetScale - currentScale) > 0.0005) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        el.style.transform = `scale(${targetScale})`;
+        ticking = false;
+      }
     };
 
     const onScroll = () => {
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(update);
+      targetScale = computeTarget();
+      if (!ticking) {
+        ticking = true;
+        rafId = requestAnimationFrame(tick);
+      }
     };
 
-    const onLoad = () => {
-      elBottomDoc = el.getBoundingClientRect().bottom + window.scrollY;
-      elHeight = el.offsetHeight;
-      el.style.transition = "none";
-      el.style.transform = `scale(${computeTarget()})`;
-      requestAnimationFrame(() => {
-        el.style.transition = "transform 0.3s ease-out";
-      });
+    // ─── Calibration triggers ───────────────────────────────────────────────
+    // Snap (no animation) whenever the layout may have shifted.
+    const snap = () => {
+      calibrate();
+      targetScale = computeTarget();
+      currentScale = targetScale;
+      el.style.transform = `scale(${currentScale})`;
     };
+
+    const onResize = () => snap();
+
+    // ─── Init ────────────────────────────────────────────────────────────────
+    calibrate();
+    snap();
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("touchmove", onScroll, { passive: true });
-    el.addEventListener("load", onLoad);
+    window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
+    el.addEventListener("load", snap);
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", onResize);
+      window.visualViewport.addEventListener("scroll", onScroll);
+    }
 
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("touchmove", onScroll);
-      el.removeEventListener("load", onLoad);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+      el.removeEventListener("load", snap);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", onResize);
+        window.visualViewport.removeEventListener("scroll", onScroll);
+      }
       cancelAnimationFrame(rafId);
     };
   }, []);

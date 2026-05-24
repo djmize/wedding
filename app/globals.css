@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+html,
+body {
+  /* Clip horizontal overflow at the document level so decorative assets can
+     visually bleed past their section boundaries without enabling pan/scroll. */
+  overflow-x: clip;
+}
+
 html {
   scroll-behavior: smooth;
 }
