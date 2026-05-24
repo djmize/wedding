@@ -2,23 +2,13 @@
 
 import { useEffect, useRef } from "react";
 
-const DEBUG = true;
-
 export default function GarlandReveal({ src, className = "" }: { src: string; className?: string }) {
   const ref = useRef<HTMLImageElement>(null);
-  const debugRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const dbg = () => document.getElementById("gr-debug");
-    const log = (msg: string) => { const d = dbg(); if (d) d.textContent = msg; document.title = msg; };
-
-    log("GR:1-started");
     const el = ref.current;
-    if (!el) { log("GR:2-el-null"); return; }
-    log("GR:3-el-ok");
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { log("GR:4-reduced-motion"); return; }
-    log("GR:5-setup");
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const isMobile = window.innerWidth < 768;
     const minScale = isMobile ? 0.80 : 0.40;
@@ -31,18 +21,29 @@ export default function GarlandReveal({ src, className = "" }: { src: string; cl
     const hi = sigmoid(-K * T_MAX);
     const normalizedSigmoid = (t: number) => (sigmoid(K * t) - lo) / (hi - lo);
 
+    // Cache stable layout values — bottom edge is invariant with transformOrigin:bottom center
+    let elBottomDoc = el.getBoundingClientRect().bottom + window.scrollY;
+    let elHeight = el.offsetHeight;
+
+    const computeTarget = (): number => {
+      const elCenter = elBottomDoc - window.scrollY - elHeight / 2;
+      const viewportMid = window.innerHeight / 2;
+      const t = Math.max(-T_MAX, Math.min(T_MAX, (elCenter - viewportMid) / viewportMid));
+      return minScale + normalizedSigmoid(t) * (maxScale - minScale);
+    };
+
+    // Snap to initial scale with no transition, then enable CSS transition.
+    // CSS transitions run on the GPU compositor thread — smooth on all browsers.
+    el.style.transition = "none";
+    el.style.transform = `scale(${computeTarget()})`;
+    requestAnimationFrame(() => {
+      el.style.transition = "transform 0.3s ease-out";
+    });
+
     let rafId: number;
 
     const update = () => {
-      const rect = el.getBoundingClientRect();
-      const elementCenter = rect.top + rect.height / 2;
-      const viewportMid = window.innerHeight / 2;
-      const t = Math.max(-T_MAX, Math.min(T_MAX, (elementCenter - viewportMid) / viewportMid));
-      const scale = minScale + normalizedSigmoid(t) * (maxScale - minScale);
-      el.style.marginTop = `-${el.offsetHeight * (1 - scale)}px`;
-      el.style.transform = `scale(${scale})`;
-      const dbg = document.getElementById("gr-debug");
-      if (dbg) dbg.textContent = `scale:${scale.toFixed(2)} t:${t.toFixed(2)} mob:${isMobile} h:${el.offsetHeight}`;
+      el.style.transform = `scale(${computeTarget()})`;
     };
 
     const onScroll = () => {
@@ -50,44 +51,37 @@ export default function GarlandReveal({ src, className = "" }: { src: string; cl
       rafId = requestAnimationFrame(update);
     };
 
+    const onLoad = () => {
+      elBottomDoc = el.getBoundingClientRect().bottom + window.scrollY;
+      elHeight = el.offsetHeight;
+      el.style.transition = "none";
+      el.style.transform = `scale(${computeTarget()})`;
+      requestAnimationFrame(() => {
+        el.style.transition = "transform 0.3s ease-out";
+      });
+    };
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("touchmove", onScroll, { passive: true });
-    el.addEventListener("load", update);
-    log("GR:6-calling-update");
-    update();
-    log("GR:7-done");
+    el.addEventListener("load", onLoad);
 
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("touchmove", onScroll);
-      el.removeEventListener("load", update);
+      el.removeEventListener("load", onLoad);
       cancelAnimationFrame(rafId);
     };
   }, []);
 
   return (
-    <>
-      <img
-        ref={ref}
-        src={src}
-        className={className}
-        style={{ transformOrigin: "bottom center", willChange: "transform" }}
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-      />
-      {DEBUG && (
-        <div
-          id="gr-debug"
-          style={{
-            position: "fixed", top: 0, left: 0, zIndex: 9999,
-            background: "red", color: "white", padding: "6px 10px",
-            fontSize: "14px", fontFamily: "monospace",
-          }}
-        >
-          no update yet
-        </div>
-      )}
-    </>
+    <img
+      ref={ref}
+      src={src}
+      className={className}
+      style={{ transformOrigin: "bottom center", willChange: "transform" }}
+      alt=""
+      aria-hidden="true"
+      loading="lazy"
+    />
   );
 }
