@@ -24,7 +24,7 @@ export default function AdminLoginPage() {
       if (res.ok) {
         router.push("/admin");
       } else {
-        setError("Incorrect password. Please try again.");
+        setError("Unable to sign in. Please try again.");
       }
     } catch {
       setError("Something went wrong. Please try again.");
