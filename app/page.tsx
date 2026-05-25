@@ -29,24 +29,33 @@ export default function Home() {
       {/* ── Hero ── */}
       <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden">
 
-        <ParallaxBotanical
+        {/* Top-right: mirrored across X axis (scaleY). local bottom-right = visual top-right = screen corner */}
+        <img
           src={`${BASE}/tropical-corner-top-right-01.png`}
           className="absolute -top-12 -right-14 md:-right-24 w-[50vw] md:w-[37vw] max-w-xl pointer-events-none select-none"
-          speed={0.06}
-          scrollBased
-          loading="eager"
+          style={{
+            transform: "scaleY(-1)",
+            maskImage: "radial-gradient(ellipse at bottom right, transparent 0%, black 55%)",
+            WebkitMaskImage: "radial-gradient(ellipse at bottom right, transparent 0%, black 55%)",
+          }}
+          alt="" aria-hidden="true" loading="eager"
         />
 
-        <ParallaxBotanical
-          src={`${BASE}/tropical-corner-bottom-left-01.png`}
-          className="absolute -bottom-12 -left-10 w-44 md:w-64 pointer-events-none select-none hidden md:block opacity-75"
-          speed={0.04}
-          scrollBased
-          loading="eager"
+        {/* Top-left (rotated 270° CW from original = 180° from previous): radial fade from top-left corner */}
+        <img
+          src={`${BASE}/tropical-corner-top-left-01.png`}
+          className="absolute -top-12 -left-14 md:-left-24 w-[50vw] md:w-[37vw] max-w-xl pointer-events-none select-none rotate-[270deg]"
+          style={{
+            maskImage: "radial-gradient(ellipse at top left, transparent 0%, black 55%)",
+            WebkitMaskImage: "radial-gradient(ellipse at top left, transparent 0%, black 55%)",
+          }}
+          alt="" aria-hidden="true" loading="lazy"
         />
 
-        <div className="relative z-10 flex flex-col items-center animate-fade-up">
-          <Eyebrow>Together with their families</Eyebrow>
+<div className="relative z-10 flex flex-col items-center animate-fade-up">
+          <p className="font-script text-gold/80 mb-3" style={{ fontSize: "clamp(1.1rem, 2vw, 1.4rem)" }}>
+            Join the celebration with
+          </p>
           <h1
             className="font-display font-light text-bark leading-[1.05] mb-9"
             style={{ fontSize: "clamp(3.25rem, 7.5vw, 5.75rem)" }}
@@ -68,7 +77,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="absolute bottom-9 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 animate-fade-up-delay">
+        <div className="absolute bottom-36 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 animate-fade-up-delay">
           <div className="w-px h-7 bg-gold/30" />
           <svg width="10" height="6" viewBox="0 0 10 6" fill="none" className="text-gold/50">
             <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
@@ -77,7 +86,7 @@ export default function Home() {
       </section>
 
       {/* ── Garland ── */}
-      <div className="w-full pointer-events-none select-none -mt-12 md:-mt-20 -mb-8 md:-mb-14">
+      <div className="w-full pointer-events-none select-none -mt-[30vh] md:-mt-[38vh] -mb-8 md:-mb-14">
         <GarlandReveal
           src={`${BASE}/tropical-garland-horizontal-01.png`}
           className="w-full"
@@ -102,61 +111,6 @@ export default function Home() {
             </p>
           </div>
         </RevealSection>
-      </section>
-
-      {/* ── Details ── */}
-      <section id="details" className="pt-14 pb-16 px-6 bg-[#F9F5EE]">
-        <div className="max-w-4xl mx-auto">
-          <RevealSection>
-            <div className="text-center mb-8">
-              <Eyebrow>Mark Your Calendar</Eyebrow>
-              <h2
-                className="font-display font-light text-bark"
-                style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.5rem)" }}
-              >
-                Event Details
-              </h2>
-              <Divider />
-            </div>
-          </RevealSection>
-
-          <RevealSection delay={150}>
-            <div
-              className="relative w-full max-w-[340px] md:max-w-[410px] mx-auto drop-shadow-[0_6px_28px_rgba(44,26,14,0.09)]"
-              style={{ aspectRatio: "1122 / 1402" }}
-            >
-              <img
-                src={`${BASE}/tropical-frame-rectangular-01.png`}
-                className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none"
-                alt="" aria-hidden="true" loading="lazy"
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-12 md:px-16">
-                <p className="font-display italic text-gold mb-5" style={{ fontSize: "clamp(1rem, 1.8vw, 1.2rem)" }}>
-                  Save the Date
-                </p>
-                <h3
-                  className="font-display font-light text-bark leading-snug mb-4"
-                  style={{ fontSize: "clamp(1.5rem, 2.8vw, 2rem)" }}
-                >
-                  Danny &amp; Bridget
-                </h3>
-                <div className="w-8 h-px bg-gold/50 mb-5" />
-                <p className="text-sage tracking-wide mb-2" style={{ fontSize: "clamp(0.75rem, 1.2vw, 0.85rem)" }}>
-                  June 12, 2027
-                </p>
-                <p
-                  className="text-gold tracking-[0.1em] uppercase leading-relaxed"
-                  style={{ fontSize: "clamp(0.62rem, 1vw, 0.72rem)" }}
-                >
-                  Seven Mile Beach<br />Grand Cayman, KY
-                </p>
-                <p className="text-bark/50 tracking-wide mt-7" style={{ fontSize: "clamp(0.62rem, 1vw, 0.68rem)" }}>
-                  Ceremony &amp; reception details<br />coming soon
-                </p>
-              </div>
-            </div>
-          </RevealSection>
-        </div>
       </section>
 
       {/* ── Travel ── */}

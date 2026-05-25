@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 type Props = {
   src: string;
   className?: string;
+  style?: React.CSSProperties;
   speed?: number;
   loading?: "eager" | "lazy";
   scrollBased?: boolean;
@@ -13,6 +14,7 @@ type Props = {
 export default function ParallaxBotanical({
   src,
   className = "",
+  style,
   speed = 0.1,
   loading = "lazy",
   scrollBased = false,
@@ -80,6 +82,7 @@ export default function ParallaxBotanical({
       ref={ref}
       src={src}
       className={className}
+      style={style}
       alt=""
       aria-hidden="true"
       loading={loading}

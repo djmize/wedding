@@ -70,4 +70,5 @@ body {
   --color-mist: #C4B49A;
 
   --font-display: var(--font-cormorant), serif;
+  --font-script: var(--font-parisienne), cursive;
 }
