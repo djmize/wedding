@@ -24,7 +24,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { fullName, email, phone, message, honeypot } = result.data;
+    const {
+      fullName,
+      email,
+      phone,
+      message,
+      honeypot,
+      interestedInVenueCondo,
+      interestedInNearbyHotel,
+      lodgingInterestNotSure,
+      condoSharingPreference,
+    } = result.data;
 
     // Honeypot filled — likely a bot. Return success without inserting.
     if (honeypot && honeypot.trim() !== "") {
@@ -48,6 +58,10 @@ export async function POST(request: NextRequest) {
       status: "pending_review",
       user_agent: userAgent,
       ip_address: ip,
+      interested_in_venue_condo: interestedInVenueCondo,
+      interested_in_nearby_hotel: interestedInNearbyHotel,
+      lodging_interest_not_sure: lodgingInterestNotSure,
+      condo_sharing_preference: condoSharingPreference,
     });
 
     if (error) {

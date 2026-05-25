@@ -19,7 +19,9 @@ export async function GET(request: NextRequest) {
 
     const { data, error } = await supabase
       .from("contact_requests")
-      .select("id, full_name, email, phone, message, status, created_at")
+      .select(
+        "id, full_name, email, phone, message, status, created_at, interested_in_venue_condo, interested_in_nearby_hotel, lodging_interest_not_sure, condo_sharing_preference"
+      )
       .order("created_at", { ascending: false })
       .limit(250);
 
@@ -39,6 +41,10 @@ export async function GET(request: NextRequest) {
       message: row.message,
       status: row.status,
       createdAt: row.created_at,
+      interestedInVenueCondo: row.interested_in_venue_condo,
+      interestedInNearbyHotel: row.interested_in_nearby_hotel,
+      lodgingInterestNotSure: row.lodging_interest_not_sure,
+      condoSharingPreference: row.condo_sharing_preference,
     }));
 
     return NextResponse.json({ ok: true, data: requests });
