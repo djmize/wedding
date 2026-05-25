@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { contactRequestSchema } from "@/lib/validation/contactRequest";
 import { getAdminClient } from "@/lib/supabase/admin";
 
+export const runtime = "nodejs";
+
 export async function POST(request: NextRequest) {
   try {
     let body: unknown;

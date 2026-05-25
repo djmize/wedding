@@ -1,11 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyPassword } from "@/lib/auth/password";
 import { createSessionToken, ADMIN_COOKIE_NAME } from "@/lib/auth/session";
+import { checkLoginRateLimit, clearLoginAttempts } from "@/lib/auth/rateLimiter";
+
+export const runtime = "nodejs";
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days in seconds
 
 export async function POST(request: NextRequest) {
   try {
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      request.headers.get("x-real-ip") ??
+      "unknown";
+
+    const rateLimit = checkLoginRateLimit(ip);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { ok: false, error: "Too many attempts. Please try again later." },
+        {
+          status: 429,
+          headers: { "Retry-After": String(rateLimit.retryAfterSeconds) },
+        }
+      );
+    }
+
     let body: unknown;
     try {
       body = await request.json();
@@ -43,6 +62,9 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
+
+    // Successful login — reset the attempt counter for this IP.
+    clearLoginAttempts(ip);
 
     const token = createSessionToken();
 

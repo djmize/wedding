@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifySessionToken, ADMIN_COOKIE_NAME } from "@/lib/auth/session";
 import { getAdminClient } from "@/lib/supabase/admin";
 
+export const runtime = "nodejs";
+
 export async function GET(request: NextRequest) {
   try {
     const token = request.cookies.get(ADMIN_COOKIE_NAME)?.value;
@@ -18,7 +20,8 @@ export async function GET(request: NextRequest) {
     const { data, error } = await supabase
       .from("contact_requests")
       .select("id, full_name, email, phone, message, status, created_at")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .limit(250);
 
     if (error) {
       console.error("[admin/contact-requests] Supabase error:", error.message);
