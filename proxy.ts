@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifySessionToken, ADMIN_COOKIE_NAME } from "@/lib/auth/session";
 
 export async function proxy(request: NextRequest) {
+  // Never intercept the login page itself — that causes an infinite redirect loop.
+  if (request.nextUrl.pathname === "/admin/login") {
+    return NextResponse.next();
+  }
+
   const token = request.cookies.get(ADMIN_COOKIE_NAME)?.value;
   const loginUrl = new URL("/admin/login", request.url);
 
