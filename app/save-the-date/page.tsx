@@ -411,7 +411,9 @@ export default function SaveTheDatePage() {
               className="text-bark/60 leading-[1.85]"
               style={{ fontSize: "clamp(0.83rem, 1.3vw, 0.88rem)" }}
             >
-              Are you planning to join us in Grand Cayman?
+              Are you planning to join us in Grand Cayman? No pressure — this
+              is just to give us a rough idea. A formal RSVP will come later
+              and your answer here doesn&apos;t commit you to anything.
             </p>
           </div>
           <div className="flex flex-col gap-3">
