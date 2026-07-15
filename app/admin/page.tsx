@@ -13,6 +13,7 @@ interface ContactRequest {
   message: string | null;
   status: string;
   createdAt: string;
+  attendanceIntent: "yes" | "hope_so" | "no" | null;
   interestedInVenueCondo: boolean;
   interestedInNearbyHotel: boolean;
   lodgingInterestNotSure: boolean;
@@ -20,6 +21,18 @@ interface ContactRequest {
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
+
+const ATTENDANCE_LABELS: Record<string, string> = {
+  yes: "Attending",
+  hope_so: "Hoping to make it",
+  no: "Unable to attend",
+};
+
+const ATTENDANCE_STYLES: Record<string, string> = {
+  yes: "bg-green-50 text-green-700 border-green-200",
+  hope_so: "bg-amber-50 text-amber-700 border-amber-200",
+  no: "bg-red-50 text-red-700 border-red-200",
+};
 
 const CONDO_SHARING_LABELS: Record<string, string> = {
   yes: "Would share condo",
@@ -140,6 +153,9 @@ export default function AdminPage() {
   const pendingCount = requests.filter(
     (r) => r.status === "pending_review"
   ).length;
+  const attendingCount = requests.filter((r) => r.attendanceIntent === "yes").length;
+  const hopingCount = requests.filter((r) => r.attendanceIntent === "hope_so").length;
+  const notAttendingCount = requests.filter((r) => r.attendanceIntent === "no").length;
 
   // ── Loading ──
   if (loading) {
@@ -187,13 +203,18 @@ export default function AdminPage() {
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-8">
 
         {/* Summary stats */}
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-2.5 mb-8">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-2.5 mb-4">
           <StatCard label="Total" value={total} />
+          <StatCard label="Attending" value={attendingCount} />
+          <StatCard label="Hoping" value={hopingCount} />
+          <StatCard label="Not attending" value={notAttendingCount} />
+          <StatCard label="Pending" value={pendingCount} />
+          <StatCard label="Would share" value={shareCount} />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 mb-8">
           <StatCard label="Venue condo" value={condoCount} />
           <StatCard label="Nearby hotel" value={hotelCount} />
-          <StatCard label="Not sure" value={notSureCount} />
-          <StatCard label="Would share" value={shareCount} />
-          <StatCard label="Pending" value={pendingCount} />
+          <StatCard label="Lodging unsure" value={notSureCount} />
         </div>
 
         {requests.length === 0 ? (
@@ -209,6 +230,7 @@ export default function AdminPage() {
                   <tr className="bg-sand/40 text-bark/55 text-[0.65rem] tracking-[0.1em] uppercase border-b border-sand">
                     <th className="text-left px-4 py-3 font-normal whitespace-nowrap">Date</th>
                     <th className="text-left px-4 py-3 font-normal">Guest</th>
+                    <th className="text-left px-4 py-3 font-normal whitespace-nowrap">Attendance</th>
                     <th className="text-left px-4 py-3 font-normal">Lodging interest</th>
                     <th className="text-left px-4 py-3 font-normal whitespace-nowrap">Condo sharing</th>
                     <th className="text-left px-4 py-3 font-normal">Status</th>
@@ -234,6 +256,13 @@ export default function AdminPage() {
                         {r.phone && (
                           <p className="text-bark/40 text-xs mt-0.5">{r.phone}</p>
                         )}
+                      </td>
+                      <td className="px-4 py-3">
+                        {r.attendanceIntent ? (
+                          <span className={`inline-block text-xs px-2 py-0.5 border ${ATTENDANCE_STYLES[r.attendanceIntent] ?? ""}`}>
+                            {ATTENDANCE_LABELS[r.attendanceIntent]}
+                          </span>
+                        ) : <span className="text-bark/30">—</span>}
                       </td>
                       <td className="px-4 py-3">
                         <LodgingTags r={r} />
@@ -282,6 +311,18 @@ export default function AdminPage() {
                       <p className="text-bark/35 text-xs">{formatDate(r.createdAt)}</p>
                     </div>
                   </div>
+
+                  {/* Attendance */}
+                  {r.attendanceIntent && (
+                    <div>
+                      <p className="text-[0.6rem] text-bark/40 tracking-[0.12em] uppercase mb-1.5">
+                        Attendance
+                      </p>
+                      <span className={`inline-block text-xs px-2 py-0.5 border ${ATTENDANCE_STYLES[r.attendanceIntent] ?? ""}`}>
+                        {ATTENDANCE_LABELS[r.attendanceIntent]}
+                      </span>
+                    </div>
+                  )}
 
                   {/* Lodging */}
                   <div>

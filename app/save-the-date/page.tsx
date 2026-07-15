@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
+type AttendanceIntent = "yes" | "hope_so" | "no";
 type CondoSharing = "yes" | "no" | "not_sure";
 
 interface FormData {
@@ -11,6 +13,7 @@ interface FormData {
   email: string;
   phone: string;
   message: string;
+  attendanceIntent: AttendanceIntent | null;
   interestedInVenueCondo: boolean;
   interestedInNearbyHotel: boolean;
   lodgingInterestNotSure: boolean;
@@ -22,6 +25,7 @@ interface FormErrors {
   email?: string;
   phone?: string;
   message?: string;
+  attendanceIntent?: string;
   lodging?: string;
   condoSharingPreference?: string;
 }
@@ -31,6 +35,7 @@ const INITIAL_FORM: FormData = {
   email: "",
   phone: "",
   message: "",
+  attendanceIntent: null,
   interestedInVenueCondo: false,
   interestedInNearbyHotel: false,
   lodgingInterestNotSure: false,
@@ -57,6 +62,10 @@ function validate(data: FormData): FormErrors {
 
   if (data.message.trim().length > 1000)
     errors.message = "Message is too long (max 1000 characters).";
+
+  if (!data.attendanceIntent) {
+    errors.attendanceIntent = "Please let us know if you plan to attend.";
+  }
 
   if (
     !data.interestedInVenueCondo &&
@@ -157,7 +166,7 @@ function CheckOption({
   );
 }
 
-function RadioOption({
+function RadioOption<T extends string>({
   id,
   name,
   value,
@@ -167,9 +176,9 @@ function RadioOption({
 }: {
   id: string;
   name: string;
-  value: CondoSharing;
-  selected: CondoSharing | null;
-  onChange: (v: CondoSharing) => void;
+  value: T;
+  selected: T | null;
+  onChange: (v: T) => void;
   children: React.ReactNode;
 }) {
   const isSelected = selected === value;
@@ -200,11 +209,10 @@ function RadioOption({
 // ── Page ───────────────────────────────────────────────────────────────────────
 
 export default function SaveTheDatePage() {
+  const router = useRouter();
   const [form, setForm] = useState<FormData>(INITIAL_FORM);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [status, setStatus] = useState<
-    "idle" | "submitting" | "success" | "error"
-  >("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
 
   function setField<K extends keyof FormData>(key: K, value: FormData[K]) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -274,6 +282,7 @@ export default function SaveTheDatePage() {
           email: form.email.trim().toLowerCase(),
           phone: form.phone.trim() || undefined,
           message: form.message.trim() || undefined,
+          attendanceIntent: form.attendanceIntent,
           interestedInVenueCondo: form.interestedInVenueCondo,
           interestedInNearbyHotel: form.interestedInNearbyHotel,
           lodgingInterestNotSure: form.lodgingInterestNotSure,
@@ -282,33 +291,14 @@ export default function SaveTheDatePage() {
         }),
       });
 
-      setStatus(res.ok ? "success" : "error");
+      if (res.ok) {
+        router.push("/");
+      } else {
+        setStatus("error");
+      }
     } catch {
       setStatus("error");
     }
-  }
-
-  // ── Success ──
-  if (status === "success") {
-    return (
-      <div className="bg-cream min-h-[calc(100vh-57px)] flex items-center justify-center px-6">
-        <div className="max-w-sm mx-auto text-center">
-          <p
-            className="font-script text-gold mb-4"
-            style={{ fontSize: "2rem" }}
-          >
-            Thank you
-          </p>
-          <div className="h-px w-10 bg-gold/40 mx-auto mb-6" />
-          <p
-            className="text-bark/70 leading-[1.9]"
-            style={{ fontSize: "clamp(0.87rem, 1.4vw, 0.93rem)" }}
-          >
-            We&apos;ll send your private wedding details soon.
-          </p>
-        </div>
-      </div>
-    );
   }
 
   // ── Form ──
@@ -330,8 +320,7 @@ export default function SaveTheDatePage() {
           className="text-bark/60 leading-[1.9] max-w-sm mx-auto"
           style={{ fontSize: "clamp(0.85rem, 1.3vw, 0.9rem)" }}
         >
-          Register your information and we&apos;ll send your private invitation
-          with full ceremony and reception details.
+          Register your information to make it easier to contact you in the future.
         </p>
         <p
           className="text-bark/40 mt-3 max-w-xs mx-auto leading-relaxed"
@@ -407,6 +396,54 @@ export default function SaveTheDatePage() {
             />
             <FieldError message={errors.message} />
           </div>
+        </div>
+
+        {/* ── Divider ── */}
+        <div className="h-px bg-sand" />
+
+        {/* ── Attendance intent ── */}
+        <div className="space-y-4">
+          <div>
+            <p className="text-[0.6rem] tracking-[0.2em] uppercase text-bark/35 mb-3">
+              Attendance
+            </p>
+            <p
+              className="text-bark/60 leading-[1.85]"
+              style={{ fontSize: "clamp(0.83rem, 1.3vw, 0.88rem)" }}
+            >
+              Are you planning to join us in Grand Cayman?
+            </p>
+          </div>
+          <div className="flex flex-col gap-3">
+            <RadioOption<AttendanceIntent>
+              id="attendance-yes"
+              name="attendanceIntent"
+              value="yes"
+              selected={form.attendanceIntent}
+              onChange={(v) => setField("attendanceIntent", v)}
+            >
+              Yes, I&apos;m planning to be there!
+            </RadioOption>
+            <RadioOption<AttendanceIntent>
+              id="attendance-hope-so"
+              name="attendanceIntent"
+              value="hope_so"
+              selected={form.attendanceIntent}
+              onChange={(v) => setField("attendanceIntent", v)}
+            >
+              I hope to make it!
+            </RadioOption>
+            <RadioOption<AttendanceIntent>
+              id="attendance-no"
+              name="attendanceIntent"
+              value="no"
+              selected={form.attendanceIntent}
+              onChange={(v) => setField("attendanceIntent", v)}
+            >
+              Unfortunately, I won&apos;t be able to make it.
+            </RadioOption>
+          </div>
+          <FieldError message={errors.attendanceIntent} />
         </div>
 
         {/* ── Divider ── */}

@@ -52,6 +52,11 @@ export const contactRequestSchema = z
     interestedInNearbyHotel: z.boolean(),
     lodgingInterestNotSure: z.boolean(),
 
+    /** Guest's self-reported attendance intent. */
+    attendanceIntent: z.enum(["yes", "hope_so", "no"], {
+      error: "Please let us know if you plan to attend.",
+    }),
+
     /** Required when interestedInVenueCondo is true; must be null/absent otherwise. */
     condoSharingPreference: z
       .enum(["yes", "no", "not_sure"])
