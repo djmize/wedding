@@ -1,6 +1,6 @@
 const config = {
-  partner1: "Danny",
-  partner2: "Bridget",
+  partner1: "Bridget",
+  partner2: "Danny",
   weddingDate: new Date(2027, 5, 12),
   weddingDateDisplay: "June 12, 2027",
   venueName: "Caribbean Club",

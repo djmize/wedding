@@ -38,7 +38,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <p className="font-script text-gold mb-1" style={{ fontSize: "1.75rem" }}>
-            Danny &amp; Bridget
+            Bridget &amp; Danny
           </p>
           <p className="text-bark/50 text-xs tracking-[0.2em] uppercase">Admin</p>
         </div>

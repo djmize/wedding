@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 html,
 body {
   /* Clip horizontal overflow at the document level so decorative assets can
@@ -60,6 +61,11 @@ body {
   }
 }
 
+/* Direct rule so var(--font-the-seasons) resolves in element context, not :root */
+.font-display {
+  font-family: var(--font-the-seasons), var(--font-cormorant), serif;
+}
+
 @theme {
   --color-cream: #FFFDF8;
   --color-ivory: #F9F5EE;
@@ -69,6 +75,5 @@ body {
   --color-gold: #A88463;
   --color-mist: #C4B49A;
 
-  --font-display: var(--font-cormorant), serif;
   --font-script: var(--font-parisienne), cursive;
 }

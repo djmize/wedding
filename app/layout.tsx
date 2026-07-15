@@ -1,9 +1,27 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Parisienne, Work_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import SmoothScroll from "@/components/SmoothScroll";
 import config from "@/lib/config";
+
+const theSeasons = localFont({
+  src: [
+    {
+      path: "./fonts/TheSeasons-Light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "./fonts/TheSeasons-Light.woff",
+      weight: "300",
+      style: "normal",
+    },
+  ],
+  variable: "--font-the-seasons",
+  display: "swap",
+});
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -34,7 +52,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${cormorant.variable} ${parisienne.variable} ${workSans.variable} bg-cream text-bark antialiased`}
+      <body className={`${theSeasons.variable} ${cormorant.variable} ${parisienne.variable} ${workSans.variable} bg-cream text-bark antialiased`}
             style={{ fontFamily: "var(--font-work-sans), sans-serif" }}>
         <SmoothScroll />
         <Nav />

@@ -445,7 +445,7 @@ export default function SaveTheDatePage() {
                   className="text-bark/55 leading-snug"
                   style={{ fontSize: "clamp(0.8rem, 1.2vw, 0.85rem)" }}
                 >
-                  Would you consider sharing a condo-style unit with other
+                  Would you consider sharing this unit with other
                   guests you know?
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
