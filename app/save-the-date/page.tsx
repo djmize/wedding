@@ -462,7 +462,13 @@ export default function SaveTheDatePage() {
               style={{ fontSize: "clamp(0.83rem, 1.3vw, 0.88rem)" }}
             >
               We&apos;re working to arrange group rates for guests. Which
-              options would you like updates about?
+              options would you like updates about?{" "}
+              <a
+                href="/places-to-stay"
+                className="text-gold underline"
+              >
+                Browse our hotel recommendations.
+              </a>
             </p>
           </div>
 

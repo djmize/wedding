@@ -61,6 +61,18 @@ body {
   }
 }
 
+/* Landscape video horizontal pan. Video is 115vw wide, offset -7.5vw left so it
+   overflows equally on both sides. Animation sweeps the full 15vw range so the
+   container is always covered. */
+.animate-video-pan {
+  animation: videoPanH 40s ease-in-out infinite;
+}
+
+@keyframes videoPanH {
+  0%, 100% { transform: translateX(7.5vw); }
+  50%       { transform: translateX(-7.5vw); }
+}
+
 /* Direct rule so var(--font-the-seasons) resolves in element context, not :root */
 .font-display {
   font-family: var(--font-the-seasons), var(--font-cormorant), serif;
