@@ -8,6 +8,7 @@ const config = {
 
   features: {
     faq: true,
+    placesToStay: true,
   },
 };
 

@@ -1,9 +1,12 @@
+import type React from "react";
 import { notFound } from "next/navigation";
 import config from "@/lib/config";
 
 type QA = {
   q: string;
   a: string;
+  /** Optional JSX override for the answer — rendered instead of `a` when present. */
+  aNode?: React.ReactNode;
   list?: string[];
 };
 
@@ -112,7 +115,16 @@ const sections: Section[] = [
     items: [
       {
         q: "Where should I stay?",
-        a: "The Caribbean Club — our venue — offers multi-bedroom suites with full kitchens and living areas, making them perfect for groups. If you're interested in sharing accommodations at the venue with other guests you know, we'd love to help coordinate that. We will also be blocking rooms at the Hampton Inn by Hilton Grand Cayman, a short drive from the venue (and a personal favorite of ours!). Of course, there are plenty of other great hotels and condos along Seven Mile Beach as well — something for every budget and travel style.",
+        a: "",
+        aNode: (
+          <p>
+            {"We’ve put together a dedicated page with our top accommodation recommendations — including group rate options and details on each hotel. Check it out at "}
+            <a href="/places-to-stay" className="text-gold underline">
+              Where to Stay
+            </a>
+            {". The short version: the Caribbean Club (our venue) has gorgeous suites perfect for groups, and the Hampton Inn by Hilton Grand Cayman is a personal favorite just a short drive away."}
+          </p>
+        ),
       },
     ],
   },
@@ -191,7 +203,7 @@ export default function FAQ() {
                     </span>
                   </summary>
                   <div className="pb-5 pt-1 text-bark/70 leading-[1.9]" style={{ fontSize: "clamp(0.85rem, 1.4vw, 0.93rem)" }}>
-                    <p>{item.a}</p>
+                    {item.aNode ? item.aNode : <p>{item.a}</p>}
                     {item.list && (
                       <ul className="mt-3 space-y-1 ml-4">
                         {item.list.map((li) => (

@@ -4,6 +4,8 @@ import { useState } from "react";
 import config from "@/lib/config";
 
 const links = [
+  { href: "/things-to-do", label: "Things to Do" },
+  { href: "/places-to-stay", label: "Where to Stay" },
   { href: "/faq", label: "Q&A" },
 ];
 
