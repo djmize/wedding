@@ -89,3 +89,40 @@ body {
 
   --font-script: var(--font-parisienne), cursive;
 }
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(5px); }
+}
+
+.animate-scroll-bounce {
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+/* Scroll-reveal scale classes — used alongside or inside reveal-item */
+.reveal-scale {
+  transform: scale(1.03);
+  transition: transform 1.1s ease-out;
+}
+.reveal-scale.in-view {
+  transform: scale(1.0);
+}
+
+/* Applied to direct image wrappers; triggered by ScrollReveal observer */
+.reveal-scale-img {
+  transform: scale(1.04);
+  transition: transform 1.4s ease-out;
+}
+.reveal-scale-img.in-view {
+  transform: scale(1.0);
+}
+/* Also fires when a reveal-item parent receives .in-view */
+.reveal-item.in-view .reveal-scale-img {
+  transform: scale(1.0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-scroll-bounce { animation: none; }
+  .reveal-scale,
+  .reveal-scale-img { transform: none; transition: none; }
+}
