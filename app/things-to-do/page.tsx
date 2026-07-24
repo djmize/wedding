@@ -1,5 +1,4 @@
 import Image from "next/image";
-import VideoHero from "@/components/VideoHero";
 
 const activities = [
   {
@@ -153,27 +152,38 @@ export default function ThingsToDoPage() {
 
       {/* Dark video hero */}
       <div className="relative h-[58vh] min-h-[380px] overflow-hidden">
-        <VideoHero src="/assets/things-to-do/hero.mp4">
-          {/* Header text */}
-          <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 animate-fade-up">
-            <svg viewBox="0 0 32 40" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-9 text-white/70 mb-4 mx-auto">
-              <line x1="16" y1="40" x2="16" y2="16" />
-              <path d="M16 16 C13 9 5 7 3 12 C8 10 13 13 16 16" />
-              <path d="M16 16 C19 9 27 7 29 12 C24 10 19 13 16 16" />
-              <path d="M16 20 C13 14 7 15 5 19 C10 17 14 18 16 20" />
-              <path d="M16 20 C19 14 25 15 27 19 C22 17 18 18 16 20" />
-            </svg>
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl tracking-[0.15em] text-white font-medium uppercase mb-1">
-              Things To Do
-            </h1>
-            <div className="w-16 h-px bg-white/40 mx-auto my-4" />
-            <p className="font-display font-semibold text-white/90 text-lg md:text-xl max-w-md mx-auto leading-relaxed">
-              Grand Cayman is full of unforgettable experiences.
-              <br className="hidden sm:block" />
-              Here are some of our favorite adventures during your stay!
-            </p>
-          </div>
-        </VideoHero>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/assets/things-to-do/hero.mp4" type="video/mp4" />
+        </video>
+
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/35" />
+
+        {/* Header text */}
+        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 animate-fade-up">
+          <svg viewBox="0 0 32 40" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-9 text-white/70 mb-4 mx-auto">
+            <line x1="16" y1="40" x2="16" y2="16" />
+            <path d="M16 16 C13 9 5 7 3 12 C8 10 13 13 16 16" />
+            <path d="M16 16 C19 9 27 7 29 12 C24 10 19 13 16 16" />
+            <path d="M16 20 C13 14 7 15 5 19 C10 17 14 18 16 20" />
+            <path d="M16 20 C19 14 25 15 27 19 C22 17 18 18 16 20" />
+          </svg>
+          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl tracking-[0.15em] text-white font-medium uppercase mb-1">
+            Things To Do
+          </h1>
+          <div className="w-16 h-px bg-white/40 mx-auto my-4" />
+          <p className="font-display font-semibold text-white/90 text-lg md:text-xl max-w-md mx-auto leading-relaxed">
+            Grand Cayman is full of unforgettable experiences.
+            <br className="hidden sm:block" />
+            Here are some of our favorite adventures during your stay!
+          </p>
+        </div>
       </div>
 
       {/* Cards */}
