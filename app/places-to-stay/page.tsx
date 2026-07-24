@@ -119,7 +119,7 @@ const hotels: Hotel[] = [
     icon: <BuildingIcon />,
     photo: "/assets/places-to-stay/caribbean-club.jpeg",
     photoAlt: "Caribbean Club aerial view from Seven Mile Beach",
-    photoPosition: "center 35%",
+    photoPosition: "center 45%",
   },
   {
     slug: "hampton-inn",
@@ -187,7 +187,7 @@ function HotelCard({
   return (
     <div className="bg-cream border border-sand flex flex-col shadow-sm">
       {/* Photo */}
-      <div className={`relative ${hotel.photoHeight ?? "h-56"}`}>
+      <div className={`relative ${hotel.photoHeight ?? "h-72 sm:h-56"}`}>
         <Image
           src={hotel.photo}
           alt={hotel.photoAlt}
