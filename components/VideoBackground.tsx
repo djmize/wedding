@@ -8,15 +8,15 @@ export default function VideoBackground({ src }: { src: string }) {
     const video = ref.current;
     if (!video) return;
 
-    const resume = () => video.play().catch(() => {});
-    const handleVisibility = () => { if (!document.hidden) resume(); };
+    const play = () => video.play().catch(() => {});
+    const handleVisibility = () => { if (!document.hidden) play(); };
 
-    resume();
-    video.addEventListener("pause", resume);
+    // Force reload on each mount so navigation doesn't leave stale paused state
+    video.load();
+    video.addEventListener("canplay", play, { once: true });
     document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
-      video.removeEventListener("pause", resume);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
@@ -28,6 +28,7 @@ export default function VideoBackground({ src }: { src: string }) {
       muted
       loop
       playsInline
+      preload="auto"
       className="absolute inset-0 w-full h-full object-cover"
     >
       <source src={src} type="video/mp4" />
