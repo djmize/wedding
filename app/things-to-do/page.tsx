@@ -1,4 +1,5 @@
 import Image from "next/image";
+import VideoBackground from "@/components/VideoBackground";
 
 const activities = [
   {
@@ -152,15 +153,7 @@ export default function ThingsToDoPage() {
 
       {/* Dark video hero */}
       <div className="relative h-[58vh] min-h-[380px] overflow-hidden">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="/assets/things-to-do/hero.mp4" type="video/mp4" />
-        </video>
+        <VideoBackground src="/assets/things-to-do/hero.mp4" />
 
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/35" />
