@@ -5,7 +5,20 @@ export default function VideoBackground({ src }: { src: string }) {
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    ref.current?.play().catch(() => {});
+    const video = ref.current;
+    if (!video) return;
+
+    const resume = () => video.play().catch(() => {});
+    const handleVisibility = () => { if (!document.hidden) resume(); };
+
+    resume();
+    video.addEventListener("pause", resume);
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      video.removeEventListener("pause", resume);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, []);
 
   return (
