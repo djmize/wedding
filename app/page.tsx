@@ -65,23 +65,23 @@ export default function Home() {
       <ScrollReveal>
 
         {/* ── 2. WELCOME NOTE ─────────────────────────────────────── */}
-        <section className="bg-ivory py-20 md:py-28">
+        <section className="bg-ivory pt-20 md:pt-28 pb-10 md:pb-14">
           <div className="max-w-6xl mx-auto px-6 md:px-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
 
               {/* Photo column */}
               <div className="reveal-item">
                 <div className="relative h-[520px] md:h-[640px] overflow-hidden">
-                  {/* reveal-scale-img observed independently by ScrollReveal */}
                   <div className="absolute inset-0 reveal-scale-img">
                     <Image
-                      src="/assets/us.png"
+                      src="/assets/holding.png"
                       fill
                       alt="Bridget and Danny"
                       className="object-cover object-top"
                       sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>
+                  <div className="absolute inset-0 border border-gold/70 pointer-events-none z-10" />
                 </div>
               </div>
 
@@ -96,30 +96,30 @@ export default function Home() {
                 >
                   Welcome
                 </h2>
-                <p className="font-script text-gold/70 text-2xl mb-6">
-                  We can&apos;t wait to celebrate with you.
-                </p>
                 <div className="text-sm md:text-base leading-[1.9] text-bark/65 space-y-4">
                   <p>
-                    We are beyond excited to celebrate this special weekend with
-                    all of our favorite people in one of our favorite places.
-                  </p>
-                  <p>
-                    The turquoise water, white sand, and unforgettable sunsets of
+                    We are beyond excited to share this special weekend with all
+                    of our favorite people in one of our favorite places. The
+                    turquoise water, white sand, and unforgettable sunsets of
                     Grand Cayman mean so much to us, and we truly cannot imagine
-                    a better place to begin this next chapter together.
+                    a better place to say &ldquo;I do.&rdquo;
                   </p>
                   <p>
-                    We know that traveling to celebrate with us is no small thing,
-                    and it means more than we can express. We created this website
-                    to make planning your trip as simple as possible, with
-                    information about where to stay, what to do, and everything
-                    you need to know for the wedding weekend.
+                    We know traveling to celebrate with us is no small thing, and
+                    it means more than we can say. We created this website to make
+                    planning your trip as easy as possible, with information about
+                    accommodations, travel, the wedding weekend, things to do, and
+                    everything else you may need.
+                  </p>
+                  <p>
+                    We will continue updating the website over the next few months
+                    as plans are finalized and more details become available, so
+                    please check back periodically for the latest information.
                   </p>
                   <p>
                     Thank you for being such an important part of our lives. We
-                    cannot wait for a weekend filled with sunshine, great food,
-                    dancing, and memories that we will cherish forever.
+                    cannot wait for a weekend filled with sunshine, love, great
+                    food, dancing, and memories we will cherish forever.
                   </p>
                 </div>
                 <div className="mt-8">
@@ -134,110 +134,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── 3. DESTINATION TRANSITION ───────────────────────────── */}
-        <section className="relative h-[60vh] md:h-[70vh] overflow-hidden">
-          {/* Image wrapper — observed by ScrollReveal for scale effect */}
-          <div className="absolute inset-0 reveal-scale-img">
-            <Image
-              src="/assets/things-to-do/seven-mile-beach.png"
-              fill
-              alt="Seven Mile Beach, Grand Cayman"
-              className="object-cover object-center"
-              sizes="100vw"
-            />
-          </div>
-          <div className="absolute inset-0 bg-black/40" />
-          <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-            <p className="font-script text-white text-3xl md:text-4xl mb-3 reveal-item">
-              A weekend in paradise
-            </p>
-            <p className="font-display text-white/75 tracking-[0.2em] text-sm uppercase reveal-item">
-              June 11–13, 2027
-            </p>
-          </div>
-        </section>
-
-        {/* ── 4. THE WEEKEND ──────────────────────────────────────── */}
-        <section className="bg-cream py-20 md:py-28">
-          <div className="max-w-5xl mx-auto px-6">
-
-            {/* Section header */}
-            <div className="text-center reveal-item">
-              <p className="text-[0.65rem] tracking-[0.2em] uppercase text-gold/70 mb-3">
-                The Weekend
-              </p>
-              <h2
-                className="font-display font-light text-bark"
-                style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)" }}
-              >
-                A few moments to look forward to
-              </h2>
-              <div className="w-12 h-px bg-sand mx-auto mt-6 mb-16" />
-            </div>
-
-            {/* Event columns */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-
-              <div className="reveal-item" style={{ transitionDelay: "0ms" }}>
-                <p className="text-[0.65rem] tracking-[0.18em] uppercase text-gold/70">
-                  Friday, June 11
-                </p>
-                <h3 className="font-display text-xl tracking-[0.1em] uppercase text-bark mt-1">
-                  Welcome Party
-                </h3>
-                <div className="w-8 h-px bg-sand my-4" />
-                <p className="text-sm text-bark/60 leading-relaxed">
-                  Kick off the weekend with us in Grand Cayman.
-                </p>
-                <p className="italic text-xs text-bark/45 mt-2">
-                  RSVP required · More details coming soon
-                </p>
-              </div>
-
-              <div className="reveal-item" style={{ transitionDelay: "150ms" }}>
-                <p className="text-[0.65rem] tracking-[0.18em] uppercase text-gold/70">
-                  Saturday, June 12
-                </p>
-                <h3 className="font-display text-xl tracking-[0.1em] uppercase text-bark mt-1">
-                  The Wedding
-                </h3>
-                <div className="w-8 h-px bg-sand my-4" />
-                <p className="text-sm text-bark/60 leading-relaxed">
-                  Ceremony and reception at Caribbean Club on Seven Mile Beach.
-                </p>
-              </div>
-
-              <div className="reveal-item" style={{ transitionDelay: "300ms" }}>
-                <p className="text-[0.65rem] tracking-[0.18em] uppercase text-gold/70">
-                  Saturday Night
-                </p>
-                <h3 className="font-display text-xl tracking-[0.1em] uppercase text-bark mt-1">
-                  Late-Night Dancing
-                </h3>
-                <div className="w-8 h-px bg-sand my-4" />
-                <p className="text-sm text-bark/60 leading-relaxed">
-                  We&apos;ll head to Luca around 10 PM to keep the night going.
-                </p>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-        {/* ── 5. QUOTE TRANSITION ─────────────────────────────────── */}
-        <section className="bg-sand/40 py-16 md:py-20">
-          <div className="max-w-2xl mx-auto text-center px-6 reveal-item">
-            <p
-              className="font-display font-light text-bark/70 italic"
-              style={{ fontSize: "clamp(1.3rem, 2.5vw, 1.9rem)" }}
-            >
-              &ldquo;Come for the wedding. Stay for the island.&rdquo;
-            </p>
-          </div>
-        </section>
-
-        {/* ── 6. NAVIGATION TILES ─────────────────────────────────── */}
-        <section className="bg-ivory py-16 md:py-20">
+        {/* ── 3. NAVIGATION TILES ──────────────────────────────────── */}
+        <section className="bg-ivory pt-10 md:pt-14 pb-16 md:pb-20">
           <div className="text-center reveal-item">
             <p className="text-[0.65rem] tracking-[0.2em] uppercase text-gold/70 mb-3">
               Explore
@@ -275,6 +173,7 @@ export default function Home() {
                   Hotels near the celebration
                 </p>
               </div>
+              <div className="absolute inset-0 border border-gold/70 pointer-events-none z-10" />
             </Link>
 
             <Link
@@ -298,6 +197,7 @@ export default function Home() {
                   Beaches, snorkeling, and adventure
                 </p>
               </div>
+              <div className="absolute inset-0 border border-gold/70 pointer-events-none z-10" />
             </Link>
 
             <Link
@@ -322,34 +222,9 @@ export default function Home() {
                   Everything you need to know
                 </p>
               </div>
+              <div className="absolute inset-0 border border-gold/70 pointer-events-none z-10" />
             </Link>
 
-          </div>
-        </section>
-
-        {/* ── 7. CLOSING ──────────────────────────────────────────── */}
-        <section className="relative min-h-[70vh] overflow-hidden">
-          <Image
-            src="/assets/hand_hold.png"
-            fill
-            alt="Bridget and Danny holding hands"
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-black/45" />
-          <div className="relative z-10 flex flex-col items-center justify-center min-h-[70vh] text-center px-6 reveal-item">
-            <p className="font-script text-white text-3xl md:text-4xl mb-6">
-              We cannot wait to celebrate with you.
-            </p>
-            <p className="font-display text-white text-2xl md:text-3xl tracking-[0.1em] mb-4">
-              Bridget &amp; Danny
-            </p>
-            <p className="font-display text-white/75 tracking-[0.15em] text-sm">
-              June 12, 2027
-            </p>
-            <p className="font-display text-white/55 tracking-[0.15em] uppercase text-xs mt-1">
-              Seven Mile Beach, Grand Cayman
-            </p>
           </div>
         </section>
 
