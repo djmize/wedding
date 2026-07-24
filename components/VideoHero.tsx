@@ -15,17 +15,24 @@ export default function VideoHero({
     const video = ref.current;
     if (!video) return;
 
-    const play = () =>
+    const tryPlay = () =>
       video.play()
         .then(() => setNeedsTap(false))
         .catch(() => setNeedsTap(true));
-    const handleVisibility = () => { if (!document.hidden) play(); };
 
-    video.load();
-    video.addEventListener("canplay", play, { once: true });
+    // Let the browser's autoplay attribute fire naturally first,
+    // then check after a delay and only intervene if still paused
+    const timer = setTimeout(() => {
+      if (video.paused) tryPlay();
+    }, 500);
+
+    const handleVisibility = () => {
+      if (!document.hidden && video.paused) tryPlay();
+    };
     document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
+      clearTimeout(timer);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
