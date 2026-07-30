@@ -6,6 +6,7 @@ import config from "@/lib/config";
 const links = [
   { href: "/things-to-do", label: "Things to Do" },
   { href: "/places-to-stay", label: "Where to Stay" },
+  { href: "/dress-code", label: "Dress Code" },
   { href: "/faq", label: "Q&A" },
 ];
 

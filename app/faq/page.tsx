@@ -76,7 +76,16 @@ const sections: Section[] = [
     items: [
       {
         q: "What is the dress code?",
-        a: "Details regarding the dress code will be coming shortly — stay tuned!",
+        a: "",
+        aNode: (
+          <p>
+            {"Not black tie, but not casual — think elegant, warm, and timeless. We've put together visual guides for both women and men. "}
+            <a href="/dress-code" className="text-gold underline">
+              View the full dress code
+            </a>
+            {"."}
+          </p>
+        ),
       },
       {
         q: "Can I wear heels?",
