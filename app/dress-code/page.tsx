@@ -5,9 +5,28 @@ export default function DressCodePage() {
     <div className="bg-cream min-h-screen">
       {/* Header */}
       <div className="text-center pt-20 pb-12 px-6 border-b border-sand">
+        <div className="flex items-center justify-center gap-3 mb-5">
+          <div className="h-px w-12 bg-sand" />
+          <svg
+            viewBox="0 0 24 40"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="w-5 h-8 text-bark/30"
+          >
+            <line x1="12" y1="40" x2="12" y2="14" />
+            <path d="M12 14 C10 8 3 6 2 10 C7 8 11 12 12 14" />
+            <path d="M12 14 C14 8 21 6 22 10 C17 8 13 12 12 14" />
+            <path d="M12 18 C10 13 5 13 4 17 C8 15 11 16 12 18" />
+            <path d="M12 18 C14 13 19 13 20 17 C16 15 13 16 12 18" />
+          </svg>
+          <div className="h-px w-12 bg-sand" />
+        </div>
         <h1
-          className="font-display font-light text-bark"
-          style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)" }}
+          className="font-display font-light text-bark tracking-[0.2em] uppercase"
+          style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
         >
           Dress Code
         </h1>
