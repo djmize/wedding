@@ -5,6 +5,7 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import SmoothScroll from "@/components/SmoothScroll";
 import config from "@/lib/config";
+import { Analytics } from "@vercel/analytics/next";
 
 const theSeasons = localFont({
   src: [
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SmoothScroll />
         <Nav />
         <main>{children}</main>
+        <Analytics />
       </body>
     </html>
   );
