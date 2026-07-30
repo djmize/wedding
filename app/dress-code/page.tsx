@@ -57,6 +57,18 @@ export default function DressCodePage() {
             />
           </div>
 
+          {/* Color palette */}
+          <div className="border border-gold/70 mb-10">
+            <Image
+              src="/assets/dress-code-palette.png"
+              alt="Wedding color palette"
+              width={1500}
+              height={700}
+              className="w-full h-auto"
+              sizes="(max-width: 768px) 100vw, 896px"
+            />
+          </div>
+
           {/* Do's and Don'ts */}
           <div className="grid grid-cols-2 gap-6 border border-sand p-6">
             <div>
